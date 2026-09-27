@@ -1,6 +1,5 @@
 # Backlog do Produto — Fliperama Local (G3)
 
-> Issue de referência: [#6](https://github.com/Arcade-IFES/Fliperama-/issues/6)
 > Fonte de requisitos: [`docs-ref/contexto-g3.md`](../docs-ref/contexto-g3.md) e [`docs-ref/integracao-api.md`](../docs-ref/integracao-api.md)
 
 ---
