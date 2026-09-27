@@ -1,6 +1,6 @@
 # Planejamento Scrum: Fliperama Local (G3)
 
-> Planejamento ágil baseado no modelo do curso ([`scrum-planejamento-template.md`](../../docs-fonte/docs/modelos/scrum-planejamento-template.md)), nos requisitos locais ([`contexto-g3.md`](../docs-ref/contexto-g3.md)) e no contrato da API ([`integracao-api.md`](../docs-ref/integracao-api.md)).
+> Planejamento ágil baseado no modelo do curso `scrum-planejamento-template.md`.
 
 ---
 
@@ -9,9 +9,9 @@
 | Campo | Descrição |
 | --- | --- |
 | Nome do Produto | Fliperama Local (G3): Recreio Arcade |
-| Equipe | Grupo G3 (César Augusto, João Victor Nascimento Ribeiro, Matheus Fragoso, Murilo Dias) |
-| Product Owner | César Augusto |
-| Scrum Master | João Victor Nascimento Ribeiro |
+| Equipe | Grupo G3 (César Augusto, João Victor, Matheus Fragoso, Murilo Dias, Maycon Silva) |
+| Product Owner | - |
+| Scrum Master | - |
 | Data de Início | 03/08/2026 |
 | Objetivo Geral | Construir um quiosque de fliperama para o pátio do IFES que funcione offline e em modo kiosk, baixe jogos aprovados da Plataforma de Gestão central (G1), rode cada jogo em sandbox seguro, registre pontuações via postMessage (G4) e colete avaliações dos alunos para a disciplina de Extensão. |
 
