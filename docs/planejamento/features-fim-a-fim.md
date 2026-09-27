@@ -12,6 +12,7 @@ Features fim a fim organizam o sistema pelo fluxo de uso do usuário. Cada funci
 4. Integrações externas: contratos com a Plataforma de Gestão (G1) e com o SDK dos jogos (G4).
 
 Para cada feature, este documento registra:
+
 - Problema que resolve
 - Quem usa (jogador, operador, desenvolvedor de jogos ou curador)
 - Resultado entregue
