@@ -21,11 +21,10 @@ O projeto é acadêmico, da disciplina de **Extensão** do curso de **Sistemas d
 │   ├── server/          #   Backend Fastify (servidor local)
 │   ├── public/          #   Assets estáticos
 │   └── tests/           #   Testes
-├── docs/                # Artefatos formais do processo (backlog, features
-│                        #   fim a fim, DSM, arquitetura) — ainda vazio,
-│                        #   a ser populado a partir das issues do GitHub
-├── docs-ref/            # Contexto de referência (temporário)
-│   ├── contexto-g3.md   #   Requisitos, cronograma e critérios de avaliação do G3
+├── docs/                # Artefatos formais do processo
+│   └── planejamento/    #   Backlog, features fim a fim, DSM e arquitetura
+├── docs-ref/            # Contexto externo e especificações de referência
+│   ├── contexto-g3.md   #   Requisitos (RF/RNF), cronograma e critérios de avaliação do G3
 │   └── integracao-api.md#   Contrato técnico da API da Plataforma de Gestão (G1)
 ├── AGENTS.md            # Este arquivo
 └── README.md
@@ -34,18 +33,17 @@ O projeto é acadêmico, da disciplina de **Extensão** do curso de **Sistemas d
 ### Pendências estruturais
 
 - **Mover código para a raiz:** o conteúdo de `fliperama-local/` será movido para a raiz do repositório em breve. Até lá, todo o código-fonte vive dentro desse subdiretório.
-- **`docs/planejamento/`:** ainda não criado. Quando existir, conterá backlog, features fim a fim, DSM e documento de arquitetura — e passará a ser a **fonte de verdade**, substituindo `docs-ref/`.
 - **`.specify/` e `specs/`:** ainda não existem. Quando criados, conterão a constitution e as specs geradas pelo Spec Kit (Spec-Driven Development).
 
 ---
 
 ## 3. Contexto obrigatório antes de qualquer tarefa
 
-**Antes de escrever specs, planos ou código, leia obrigatoriamente:**
+**Antes de escrever specs, planos ou código, consulte obrigatoriamente:**
 
-1. **`docs-ref/contexto-g3.md`** — requisitos, cronograma e critérios de avaliação do G3.
-2. **`docs-ref/integracao-api.md`** — contrato técnico da API da Plataforma de Gestão (mantida pelo G1).
-3. **`docs/planejamento/*.md`** (se existirem) — backlog, features, DSM, arquitetura. Quando disponíveis, estes são a **fonte de verdade** e têm precedência sobre `docs-ref/`.
+1. **`docs/planejamento/*.md`** — backlog, features fim a fim, DSM e arquitetura. Esta é a **fonte de verdade** para o desenvolvimento e decisões internas da aplicação.
+2. **`docs-ref/contexto-g3.md`** — requisitos funcionais e não funcionais do G3 (RF-L01 a RF-L26, RNF-L01 a RNF-L10), cronograma de entregas (E1 a E4, CP1 a CP4) e critérios de avaliação.
+3. **`docs-ref/integracao-api.md`** — contrato técnico e especificação de endpoints da API da Plataforma de Gestão (G1).
 
 Não pule esta etapa. O contexto desses arquivos é indispensável para evitar decisões desalinhadas com os requisitos reais do projeto.
 
