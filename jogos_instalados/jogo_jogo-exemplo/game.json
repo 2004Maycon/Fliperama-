@@ -1,0 +1,15 @@
+{
+  "id": "jogo-exemplo",
+  "nome": "Quiz Invaders (exemplo)",
+  "versao": "1.1.0",
+  "autores": ["G1 — Plataforma de Gestão"],
+  "descricao": "Jogo de exemplo do Recreio Arcade: mova a nave até a resposta certa e atire. Serve de modelo de repositório válido para submissão.",
+  "controles": "Setas esquerda e direita movem a nave; Espaço ou Enter atira.",
+  "entrada": "index.html",
+  "capa": "capa.png",
+  "classico_referencia": "Space Invaders",
+  "mecanica": "tiro",
+  "tema": "Matemática",
+  "nivel": "ensino médio",
+  "questoes": "questoes.json"
+}

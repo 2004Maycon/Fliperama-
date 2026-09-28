@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Quiz Invaders (exemplo)</title>
+    <style>
+      * { box-sizing: border-box; }
+      html, body { margin: 0; height: 100%; background: #07061a; color: #f2f2f7; font-family: system-ui, sans-serif; }
+      body { display: grid; place-items: center; overflow: hidden; }
+      /* Área de jogo 4:3, como o fliperama (mínimo 1024×768). */
+      #tela { position: relative; width: min(100vw, calc(100vh * 4 / 3)); aspect-ratio: 4 / 3; background: radial-gradient(#15133a, #07061a); font-size: min(2.2vw, 2.9vh); }
+      #hud { display: flex; justify-content: space-between; padding: 1.2em 2em; font-weight: 600; opacity: 0.9; }
+      #enunciado { margin: 0.5em 2em 0; font-size: 1.5em; line-height: 1.3; text-align: center; min-height: 2.6em; }
+      #alvos { position: absolute; top: 34%; left: 5%; right: 5%; display: grid; grid-template-columns: repeat(4, 1fr); gap: 3%; }
+      .alvo { padding: 1em 0.5em; border-radius: 0.4em; text-align: center; font-size: 1.3em; font-weight: 700; color: #07061a; }
+      .alvo:nth-child(1) { background: #eb505a; }
+      .alvo:nth-child(2) { background: #50c878; }
+      .alvo:nth-child(3) { background: #5096f0; }
+      .alvo:nth-child(4) { background: #f0c846; }
+      .alvo.certo { outline: 0.25em solid #fff; }
+      .alvo.errado { opacity: 0.25; }
+      #nave { position: absolute; bottom: 8%; width: 0; height: 0; border-left: 2em solid transparent; border-right: 2em solid transparent; border-bottom: 3em solid #f0f0fa; transform: translateX(-50%); transition: left 0.12s; }
+      #tiro { position: absolute; width: 0.3em; background: #fff078; transform: translateX(-50%); display: none; }
+      #mensagem { position: absolute; left: 5%; right: 5%; bottom: 25%; text-align: center; font-size: 1.2em; min-height: 1.5em; }
+      #painel { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; gap: 0.6em; background: rgba(7, 6, 26, 0.92); }
+      #painel h1 { margin: 0; font-size: 2.6em; }
+      #painel p { margin: 0; font-size: 1.3em; }
+      #apelido { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; gap: 0.8em; background: rgba(7, 6, 26, 0.95); }
+      #apelido h2 { margin: 0; font-size: 2em; }
+      #letras { display: flex; gap: 0.3em; justify-content: center; font: 700 2.4em ui-monospace, monospace; }
+      #letras span { width: 1.1em; border-bottom: 0.08em solid #5a5880; }
+      #letras span.atual { color: #fff078; border-color: #fff078; }
+      #apelido small { opacity: 0.75; font-size: 1em; }
+      .escondido { display: none !important; }
+    </style>
+  </head>
+  <body>
+    <main id="tela">
+      <div id="hud"><span id="placar">Pontos: 0</span><span id="progresso"></span><span id="tempo"></span></div>
+      <p id="enunciado"></p>
+      <div id="alvos"></div>
+      <div id="tiro"></div>
+      <div id="nave"></div>
+      <p id="mensagem"></p>
+      <section id="apelido" class="escondido">
+        <h2>Fim de jogo! <span id="pontos-finais"></span> pontos</h2>
+        <p>Digite seu apelido para o ranking</p>
+        <div id="letras"></div>
+        <small>↑ ↓ trocam a letra · → próxima · ← apaga · ou digite · Enter confirma</small>
+      </section>
+      <section id="painel">
+        <h1>Quiz Invaders</h1>
+        <p>← → movem a nave · Espaço atira na resposta certa</p>
+        <p id="resultado"></p>
+        <p><strong>Pressione Enter para começar</strong></p>
+      </section>
+    </main>
+    <script src="jogo.js"></script>
+  </body>
+</html>

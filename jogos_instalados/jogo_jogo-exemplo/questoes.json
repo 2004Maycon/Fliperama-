@@ -1,0 +1,292 @@
+{
+  "tema": "Matemática",
+  "nivel": "ensino médio",
+  "questoes": [
+    {
+      "id": "q1",
+      "enunciado": "Qual é o menor número primo?",
+      "alternativas": [
+        "1",
+        "2",
+        "3",
+        "0"
+      ],
+      "correta": 1,
+      "explicacao": "2 é o menor primo: só é divisível por 1 e por ele mesmo.",
+      "fonte": "https://pt.wikipedia.org/wiki/Número_primo"
+    },
+    {
+      "id": "q2",
+      "enunciado": "Quantos números primos existem entre 1 e 20?",
+      "alternativas": [
+        "6",
+        "7",
+        "8",
+        "9"
+      ],
+      "correta": 2,
+      "explicacao": "São 2, 3, 5, 7, 11, 13, 17 e 19.",
+      "fonte": "https://pt.wikipedia.org/wiki/Número_primo"
+    },
+    {
+      "id": "q3",
+      "enunciado": "Catetos 3 e 4: quanto mede a hipotenusa?",
+      "alternativas": [
+        "5",
+        "6",
+        "7",
+        "12"
+      ],
+      "correta": 0,
+      "explicacao": "3² + 4² = 25, e √25 = 5.",
+      "fonte": "https://pt.wikipedia.org/wiki/Teorema_de_Pitágoras"
+    },
+    {
+      "id": "q4",
+      "enunciado": "Catetos 5 e 12: quanto mede a hipotenusa?",
+      "alternativas": [
+        "17",
+        "13",
+        "15",
+        "11"
+      ],
+      "correta": 1,
+      "explicacao": "5² + 12² = 169, e √169 = 13.",
+      "fonte": "https://pt.wikipedia.org/wiki/Teorema_de_Pitágoras"
+    },
+    {
+      "id": "q5",
+      "enunciado": "Quanto somam os ângulos internos de um triângulo?",
+      "alternativas": [
+        "90°",
+        "360°",
+        "270°",
+        "180°"
+      ],
+      "correta": 3,
+      "explicacao": "Em qualquer triângulo plano a soma é 180°.",
+      "fonte": "https://pt.wikipedia.org/wiki/Triângulo"
+    },
+    {
+      "id": "q6",
+      "enunciado": "Quanto somam os ângulos internos de um quadrilátero?",
+      "alternativas": [
+        "360°",
+        "180°",
+        "540°",
+        "720°"
+      ],
+      "correta": 0,
+      "explicacao": "Um quadrilátero se divide em dois triângulos: 2 × 180° = 360°.",
+      "fonte": "https://pt.wikipedia.org/wiki/Quadrilátero"
+    },
+    {
+      "id": "q7",
+      "enunciado": "Qual é a raiz quadrada de 144?",
+      "alternativas": [
+        "14",
+        "11",
+        "12",
+        "16"
+      ],
+      "correta": 2,
+      "explicacao": "12 × 12 = 144.",
+      "fonte": "https://pt.wikipedia.org/wiki/Raiz_quadrada"
+    },
+    {
+      "id": "q8",
+      "enunciado": "Quanto é 2 elevado a 10?",
+      "alternativas": [
+        "1000",
+        "512",
+        "2048",
+        "1024"
+      ],
+      "correta": 3,
+      "explicacao": "2¹⁰ = 1024.",
+      "fonte": "https://pt.wikipedia.org/wiki/Potenciação"
+    },
+    {
+      "id": "q9",
+      "enunciado": "Quanto vale 0! (fatorial de zero)?",
+      "alternativas": [
+        "1",
+        "0",
+        "Não existe",
+        "10"
+      ],
+      "correta": 0,
+      "explicacao": "Por definição, 0! = 1.",
+      "fonte": "https://pt.wikipedia.org/wiki/Fatorial"
+    },
+    {
+      "id": "q10",
+      "enunciado": "Quanto é 5! (fatorial de 5)?",
+      "alternativas": [
+        "25",
+        "120",
+        "60",
+        "720"
+      ],
+      "correta": 1,
+      "explicacao": "5! = 5 × 4 × 3 × 2 × 1 = 120.",
+      "fonte": "https://pt.wikipedia.org/wiki/Fatorial"
+    },
+    {
+      "id": "q11",
+      "enunciado": "Quais são as raízes de x² − 5x + 6 = 0?",
+      "alternativas": [
+        "1 e 6",
+        "−2 e −3",
+        "2 e 3",
+        "5 e 6"
+      ],
+      "correta": 2,
+      "explicacao": "(x − 2)(x − 3) = 0, logo x = 2 ou x = 3.",
+      "fonte": "https://pt.wikipedia.org/wiki/Equação_quadrática"
+    },
+    {
+      "id": "q12",
+      "enunciado": "Qual é o discriminante (Δ) de x² + 2x + 1?",
+      "alternativas": [
+        "4",
+        "2",
+        "−4",
+        "0"
+      ],
+      "correta": 3,
+      "explicacao": "Δ = b² − 4ac = 4 − 4 = 0: raiz dupla.",
+      "fonte": "https://pt.wikipedia.org/wiki/Equação_quadrática"
+    },
+    {
+      "id": "q13",
+      "enunciado": "Quanto é 25% de 80?",
+      "alternativas": [
+        "20",
+        "25",
+        "16",
+        "40"
+      ],
+      "correta": 0,
+      "explicacao": "80 × 0,25 = 20.",
+      "fonte": "https://pt.wikipedia.org/wiki/Percentagem"
+    },
+    {
+      "id": "q14",
+      "enunciado": "Qual é a área de um círculo de raio r?",
+      "alternativas": [
+        "2πr",
+        "πr²",
+        "πd",
+        "r²"
+      ],
+      "correta": 1,
+      "explicacao": "A área do círculo é π vezes o raio ao quadrado.",
+      "fonte": "https://pt.wikipedia.org/wiki/Círculo"
+    },
+    {
+      "id": "q15",
+      "enunciado": "Qual é o próximo termo da PA 3, 7, 11, 15, ...?",
+      "alternativas": [
+        "18",
+        "21",
+        "19",
+        "20"
+      ],
+      "correta": 2,
+      "explicacao": "A razão é 4: 15 + 4 = 19.",
+      "fonte": "https://pt.wikipedia.org/wiki/Progressão_aritmética"
+    },
+    {
+      "id": "q16",
+      "enunciado": "Qual é a razão da PG 2, 6, 18, 54, ...?",
+      "alternativas": [
+        "4",
+        "2",
+        "6",
+        "3"
+      ],
+      "correta": 3,
+      "explicacao": "Cada termo é o anterior vezes 3.",
+      "fonte": "https://pt.wikipedia.org/wiki/Progressão_geométrica"
+    },
+    {
+      "id": "q17",
+      "enunciado": "Quanto vale log₁₀ 1000?",
+      "alternativas": [
+        "3",
+        "10",
+        "100",
+        "4"
+      ],
+      "correta": 0,
+      "explicacao": "10³ = 1000, então log₁₀ 1000 = 3.",
+      "fonte": "https://pt.wikipedia.org/wiki/Logaritmo"
+    },
+    {
+      "id": "q18",
+      "enunciado": "Qual é o MDC de 12 e 18?",
+      "alternativas": [
+        "3",
+        "6",
+        "2",
+        "36"
+      ],
+      "correta": 1,
+      "explicacao": "Os divisores comuns são 1, 2, 3 e 6; o maior é 6.",
+      "fonte": "https://pt.wikipedia.org/wiki/Máximo_divisor_comum"
+    },
+    {
+      "id": "q19",
+      "enunciado": "Qual é o MMC de 4 e 6?",
+      "alternativas": [
+        "24",
+        "2",
+        "12",
+        "10"
+      ],
+      "correta": 2,
+      "explicacao": "Os múltiplos comuns são 12, 24, ...; o menor é 12.",
+      "fonte": "https://pt.wikipedia.org/wiki/Mínimo_múltiplo_comum"
+    },
+    {
+      "id": "q20",
+      "enunciado": "Quantas diagonais tem um hexágono?",
+      "alternativas": [
+        "6",
+        "12",
+        "8",
+        "9"
+      ],
+      "correta": 3,
+      "explicacao": "n(n − 3)/2 = 6 × 3 / 2 = 9.",
+      "fonte": "https://pt.wikipedia.org/wiki/Diagonal"
+    },
+    {
+      "id": "q21",
+      "enunciado": "Quanto vale sen 30°?",
+      "alternativas": [
+        "1/2",
+        "√2/2",
+        "√3/2",
+        "1"
+      ],
+      "correta": 0,
+      "explicacao": "sen 30° = 1/2, um dos ângulos notáveis.",
+      "fonte": "https://pt.wikipedia.org/wiki/Seno"
+    },
+    {
+      "id": "q22",
+      "enunciado": "Qual é o volume de um cubo de aresta 3?",
+      "alternativas": [
+        "9",
+        "27",
+        "18",
+        "12"
+      ],
+      "correta": 1,
+      "explicacao": "V = a³ = 3³ = 27.",
+      "fonte": "https://pt.wikipedia.org/wiki/Cubo"
+    }
+  ]
+}
