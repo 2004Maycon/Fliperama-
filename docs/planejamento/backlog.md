@@ -9,7 +9,7 @@
 | Campo | Descrição |
 | --- | --- |
 | Nome do Produto | Fliperama Local (G3): Recreio Arcade |
-| Equipe | Grupo G3 (César Augusto, João Victor, Matheus Fragoso, Murilo Dias, Maycon Silva) |
+| Equipe | Grupo G3 (César Augusto, João Victor, Matheus Fragoso, Maycon Silva) |
 | Product Owner | - |
 | Scrum Master | - |
 | Data de Início | 03/08/2026 |
@@ -406,12 +406,12 @@ Validar a experiência do jogador no protótipo navegável das 7 telas e demonst
 
 | EPC | US | Task | Responsável | Status |
 | --- | --- | --- | --- | --- |
-| EPIC-02 | US-07 | Desenhar telas do catálogo e seleção no Figma Maker | Matheus / Murilo | Concluído |
-| EPIC-02 | US-08 | Desenhar fluxo de identificação do jogador por apelido | César | Concluído |
+| EPIC-02 | US-07 | Desenhar telas do catálogo e seleção no Figma Maker | João Victor | Concluído |
+| EPIC-02 | US-08 | Desenhar fluxo de identificação do jogador por apelido | João Victor | Concluído |
 | EPIC-02 | US-10 | Estruturar fluxo clicável 100% por teclado no protótipo | João Victor | Concluído |
 | EPIC-03 | US-15 | Criar página de teste carregando jogo em `<iframe sandbox>` | João Victor | Concluído |
-| EPIC-03 | US-16 | Capturar evento `postMessage` (`PLACAR`) e exibir dados na tela | João Victor / César | Concluído |
-| EPIC-04 | US-22 | Desenhar tela de fim de partida com votação de 1 a 5 estrelas | Matheus / Murilo | Concluído |
+| EPIC-03 | US-16 | Capturar evento `postMessage` (`PLACAR`) e exibir dados na tela | João Victor | Concluído |
+| EPIC-04 | US-22 | Desenhar tela de fim de partida com votação de 1 a 5 estrelas | João Victor | Concluído |
 
 ### Critérios de Conclusão
 
@@ -441,11 +441,11 @@ Sincronizar jogos com a API de Gestão (G1), executar pacotes locais em cache, c
 | EPIC-01 | US-02 | Rodar jogos do cache em disco mesmo sem conexão ativa | César | Em andamento |
 | EPIC-01 | US-03 | Criar fila de reenvio em disco com espera crescente e idempotência por `id_partida` | João Victor | Em andamento |
 | EPIC-01 | US-04 | Criar módulo de persistência com escrita atômica e append-only em `partidas.jsonl` | César | Em andamento |
-| EPIC-01 | US-06 | Implementar leitura de configuração externa (URL, token de estação) | Murilo | Em andamento |
+| EPIC-01 | US-06 | Implementar leitura de configuração externa (URL, token de estação) | Maycon | Em andamento |
 | EPIC-02 | US-07 | Desenvolver painel de seleção em React com grade alimentada pelo `catalogo.json` | Matheus | Em andamento |
 | EPIC-02 | US-08 | Implementar tela de inserção de apelido de até 9 caracteres | Matheus | Em andamento |
 | EPIC-02 | US-10 | Assegurar navegação 100% por setas e Enter nas telas do frontend | Matheus / João Victor | Em andamento |
-| EPIC-02 | US-14 | Implementar tratamento de erros com mensagens amigáveis de jogador | Murilo | Em andamento |
+| EPIC-02 | US-14 | Implementar tratamento de erros com mensagens amigáveis de jogador | Maycon | Em andamento |
 | EPIC-03 | US-15 | Servir pacotes locais via Fastify em iframe isolado sem same-origin | João Victor | Concluído |
 | EPIC-03 | US-16 | Capturar `postMessage`, validar origem e enviar dados para `/api/placares` | João Victor | Concluído |
 | EPIC-03 | US-17 | Remover iframe e liberar memória ao concluir a partida | César | Em andamento |
@@ -475,15 +475,15 @@ Configurar modo kiosk restrito, implementar coleta de votos de 1 a 5, timeouts d
 
 | EPC | US | Task | Responsável | Status |
 | --- | --- | --- | --- | --- |
-| EPIC-01 | US-05 | Configurar inicialização automática do sistema direto na tela de atração (boot) | Murilo | Pendente |
+| EPIC-01 | US-05 | Configurar inicialização automática do sistema direto na tela de atração (boot) | Maycon | Pendente |
 | EPIC-02 | US-09 | Implementar timeouts de inatividade (60 s no painel, 20 s no fim da partida) | Matheus | Pendente |
 | EPIC-02 | US-11 | Implementar tela de mapa de teclas com remapeamento persistente em `teclas.json` | Matheus | Pendente |
-| EPIC-02 | US-12 | Validar resolução 1024×768 (4:3) e contraste visual no monitor físico do quiosque | Murilo | Pendente |
+| EPIC-02 | US-12 | Validar resolução 1024×768 (4:3) e contraste visual no monitor físico do quiosque | Maycon | Pendente |
 | EPIC-02 | US-13 | Implementar ranking offline combinando dados locais com oficial sincronizado | César | Pendente |
-| EPIC-02 | US-26 | Implementar bloqueio de apelidos ofensivos baseado em lista configurável | Murilo | Pendente |
+| EPIC-02 | US-26 | Implementar bloqueio de apelidos ofensivos baseado em lista configurável | Maycon | Pendente |
 | EPIC-03 | US-18 | Configurar Chromium em modo kiosk e bloquear atalhos de saída do SO | João Victor | Pendente |
 | EPIC-03 | US-20 | Implementar timeouts de jogo (15 s para carga, 5 min para partida) com log | César | Pendente |
-| EPIC-03 | US-21 | Implementar atalho de mudo global retendo estado e emitindo `ARCADE_MUDO` | Murilo | Pendente |
+| EPIC-03 | US-21 | Implementar atalho de mudo global retendo estado e emitindo `ARCADE_MUDO` | Maycon | Pendente |
 | EPIC-04 | US-22 | Implementar tela de voto (1 a 5 estrelas) com tecla para pular e envio à API | Matheus | Pendente |
 | EPIC-04 | US-23 | Estruturar gravação em `partidas.jsonl` e log de eventos de sessão | César | Pendente |
 | EPIC-04 | — | Conduzir teste de campo no pátio (≥ 10 jogadores, ≥ 15 partidas concluídas) | Toda a equipe | Pendente |
@@ -512,11 +512,11 @@ Construir tela de diagnóstico, exportar dados da sessão, implementar os três 
 
 | EPC | US | Task | Responsável | Status |
 | --- | --- | --- | --- | --- |
-| EPIC-04 | US-24 | Desenvolver tela de diagnóstico por combinação de teclas reservada | Matheus / Murilo | Pendente |
+| EPIC-04 | US-24 | Desenvolver tela de diagnóstico por combinação de teclas reservada | Matheus / Maycon | Pendente |
 | EPIC-04 | US-25 | Desenvolver rotina de exportação da sessão em formatos JSON e CSV | César | Pendente |
 | — | — | Implementar Ajuste de Campo #1 (definido pós-teste de campo) | João Victor | Pendente |
 | — | — | Implementar Ajuste de Campo #2 (definido pós-teste de campo) | Matheus | Pendente |
-| — | — | Implementar Ajuste de Campo #3 (definido pós-teste de campo) | César / Murilo | Pendente |
+| — | — | Implementar Ajuste de Campo #3 (definido pós-teste de campo) | César / Maycon | Pendente |
 | — | — | Consolidar documentação final e encerramento de pendências | Toda a equipe | Pendente |
 
 ### Critérios de Conclusão
