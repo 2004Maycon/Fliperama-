@@ -47,7 +47,7 @@
 | US-05 | US | Iniciar direto na tela de atração ao ligar o computador na tomada | Média | Pendente |
 | US-06 | US | Carregar configurações externas (URL da API, token de estação e intervalos) | Alta | Em andamento |
 | US-07 | US | Exibir painel de seleção em grade com capa, nome, autores e controles | Alta | Em andamento |
-| US-08 | US | Identificar jogador por apelido de até 9 caracteres, com opção anônima e filtro ofensivo | Alta | Em andamento |
+| US-08 | US | Identificar jogador por matrícula (12 dígitos) e apelido (até 9 caracteres), com opção anônima | Alta | Em andamento |
 | US-09 | US | Voltar à tela de atração por inatividade no painel e na tela de fim de jogo | Média | Pendente |
 | US-10 | US | Navegar por todo o sistema usando apenas teclado (setas e Enter, foco visual) | Alta | Em andamento |
 | US-11 | US | Exibir mapa de teclas na atração e permitir remapeamento persistente | Média | Pendente |
@@ -207,16 +207,16 @@ Coletar votos dos alunos, registrar histórico de partidas em disco e gerar dado
   4. Navegar inteiramente por setas e Enter.
   5. Destacar visualmente o card com foco ativo.
 
-##### US-08: Identificar o jogador por apelido
+##### US-08: Identificar o jogador por matrícula e apelido
 
-* **Como** jogador, **quero** digitar um apelido de até 9 caracteres antes de jogar, **para que** meu placar apareça no ranking público.
+* **Como** jogador, **quero** informar minha matrícula e apelido após a partida, **para que** minha pontuação seja associada ao ranking oficial do IFES sem bloquear o início do jogo.
 * **Requisitos:** RF-L04, RF-L26
 * **Critérios de aceitação:**
-  1. Aceitar até 9 caracteres alfanuméricos (`A-Z`, `0-9`).
-  2. Permitir digitar o apelido no teclado ou selecioná-lo com as setas.
-  3. Confirmar com Enter; campo vazio gera automaticamente `ANON`.
-  4. Rejeitar termos da lista de bloqueio com aviso amigável.
-  5. Converter caracteres automaticamente para maiúsculas.
+  1. Coletar matrícula institucional de 12 dígitos numéricos e apelido de até 9 caracteres alfanuméricos (`A-Z`, `0-9`).
+  2. Apresentar a identificação ao final da sessão, permitindo jogar direto pelo catálogo sem cadastro prévio.
+  3. Preencher automaticamente com `ANON` caso o apelido fique em branco.
+  4. Bloquear palavras da lista de termos ofensivos com aviso amigável.
+  5. Permitir pular a identificação caso o jogador não queira registrar o placar no ranking.
 
 ##### US-09: Retornar à atração por inatividade
 
@@ -293,7 +293,7 @@ Coletar votos dos alunos, registrar histórico de partidas em disco e gerar dado
 * **Critérios de aceitação:**
   1. Ouvir eventos disparados por `window.addEventListener('message', ...)`.
   2. Validar se `event.source === iframe.contentWindow` e se o identificador confere com o jogo ativo.
-  3. Coletar `pontos`, `duracao_s`, `acertos`, `erros` e `tema`.
+  3. Coletar dados da partida nos formatos `PLACAR` (protocolo oficial G4) e `GAME_OVER` (compatibilidade).
   4. Anexar `jogador`, `id_partida` (UUID) e `jogado_em` antes de salvar e enviar.
 
 ##### US-17: Encerrar jogo e liberar memória
@@ -423,7 +423,7 @@ Validar a experiência do jogador no protótipo navegável das 7 telas e demonst
 
 ### Observações
 
-> A Sprint 1 focou em Discovery e validação de integração. A demonstração de iframe com captura de placar foi a única parte exigida em código; os demais fluxos foram validados no protótipo.
+> A Sprint 1 focou em Discovery e validação técnica da integração. A execução de jogos em iframe e a captura de placar foram validadas com jogos de teste locais e fila em arquivo único. Os requisitos definitivos de sincronização com a API G1 e escrita atômica contra queda de energia estão alocados para a Sprint 2.
 
 ---
 
@@ -443,7 +443,7 @@ Sincronizar jogos com a API de Gestão (G1), executar pacotes locais em cache, c
 | EPIC-01 | US-04 | Criar módulo de persistência com escrita atômica e append-only em `partidas.jsonl` | César | Em andamento |
 | EPIC-01 | US-06 | Implementar leitura de configuração externa (URL, token de estação) | Maycon | Em andamento |
 | EPIC-02 | US-07 | Desenvolver painel de seleção em React com grade alimentada pelo `catalogo.json` | Matheus | Em andamento |
-| EPIC-02 | US-08 | Implementar tela de inserção de apelido de até 9 caracteres | Matheus | Em andamento |
+| EPIC-02 | US-08 | Implementar tela de identificação por matrícula e apelido | Matheus | Em andamento |
 | EPIC-02 | US-10 | Assegurar navegação 100% por setas e Enter nas telas do frontend | Matheus / João Victor | Em andamento |
 | EPIC-02 | US-14 | Implementar tratamento de erros com mensagens amigáveis de jogador | Maycon | Em andamento |
 | EPIC-03 | US-15 | Servir pacotes locais via Fastify em iframe isolado sem same-origin | João Victor | Concluído |
@@ -461,7 +461,7 @@ Sincronizar jogos com a API de Gestão (G1), executar pacotes locais em cache, c
 
 ### Observações
 
-> Escopo da Entrega E2 (28/09/2026). A validação inclui desconectar o cabo de rede durante a partida e testar reenvios repetidos.
+> Escopo da Entrega E2 (28/09/2026). A validação inclui desconectar o cabo de rede durante a partida e testar reenvios repetidos. O fluxo de telas foi ajustado para que o jogador acesse o jogo imediatamente a partir do catálogo, realizando a avaliação e a identificação institucional ao final da sessão.
 
 ---
 

@@ -101,11 +101,18 @@ O projeto segue [Semantic Versioning 2.0.0](https://semver.org/lang/pt-BR/): `MA
 
 ---
 
-## 4. Resumo rápido
+## 4. Desenvolvimento com Spec-Kit
+
+O projeto utiliza Spec-Driven Development para especificar, planejar e criar issues antes de implementar código. Consulte o guia detalhado em [`docs/referencia/spec-kit.md`](docs/referencia/spec-kit.md) para o passo a passo e a relação de comandos disponíveis.
+
+---
+
+## 5. Resumo rápido
 
 ```text
 1. Crie branch: git checkout -b feature/<nome> main
-2. Desenvolva e faça commits: feat: descrição curta
-3. Abra PR para main do fork (CI deve passar)
-4. Após merge, abra PR do fork para Arcade-IFES/Fliperama-:dev
+2. Especifique e planeje com Spec-Kit (/speckit-specify, /speckit-plan, /speckit-tasks)
+3. Desenvolva e faça commits: feat: descrição curta
+4. Abra PR para main do fork (CI deve passar)
+5. Após merge, abra PR do fork para Arcade-IFES/Fliperama-:dev
 ```

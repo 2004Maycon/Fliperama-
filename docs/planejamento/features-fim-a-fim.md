@@ -26,7 +26,7 @@ A tabela reúne as seis features verticais do fliperama em ordem de prioridade d
 | --- | --- | --- | --- |
 | F4: Execução isolada em iframe com captura de pontuação via SDK (Prioridade 1) | Jogador e desenvolvedor do jogo (G4) | Roda o jogo em tela cheia sob sandbox restrito, envia dados iniciais via `ARCADE_INIT`, recebe pontuação via `postMessage` (`PLACAR`) e fecha o iframe liberando memória RAM. | React (view `EmJogo`), Fastify (servidor de arquivos estáticos locais), disco (`jogos/<id>/<versao>/`) e contratos de mensagem G3/G4. |
 | F3: Navegação e seleção no catálogo de jogos locais (Prioridade 2) | Jogador | Apresenta a grade de jogos em tela 4:3 com capa, título, autoria e controles. Funciona só com setas e Enter, direto do disco, mesmo sem conexão de rede. | React (view `PainelSelecao`), Fastify (`GET /api/jogos` local e rotas de capas) e disco (`catalogo.json` e assets). |
-| F2: Identificação do jogador com validação de apelido (Prioridade 3) | Jogador | Coleta apelido de até 9 caracteres (`A-Z`, `0-9`) por digitação ou setas. Preenche `ANON` se o campo ficar vazio e bloqueia termos ofensivos antes de iniciar a partida. | React (view `Identificacao`), Fastify (normalização e validação de strings) e disco (`config.json`). |
+| F2: Identificação do jogador por matrícula e apelido (Prioridade 3) | Jogador | Coleta matrícula de 12 dígitos e apelido de até 9 caracteres ao final da partida. Preenche ANON se o apelido ficar vazio e bloqueia termos ofensivos. | React (view `Identificacao`), Fastify (normalização e validação) e disco (`config.json`). |
 | F6: Sincronização de catálogo e download de zips com a gestão central (Prioridade 4) | Operador do quiosque e curador (G1) | Atualiza o quiosque com pacotes aprovados na gestão central. Baixa zips pendentes com checagem condicional (`ETag`/`sha256`), extrai no disco e remove jogos descontinuados. | React (view `Sincronizacao` e status no topo), Fastify (rotina em background) e API central (`GET /api/jogos` e `GET /api/jogos/{id}/pacote`). |
 | F5: Registro de voto e enfileiramento de resultados offline (Prioridade 5) | Jogador, curador (G1) e operador | Grava partidas em `partidas.jsonl`, recolhe nota opcional de 1 a 5 estrelas e envia à API central com chave de idempotência (`id_partida`). Em falhas de rede, guarda na pasta `fila/` e repete o envio com espera progressiva. | React (view `FimPartida`), Fastify (rota de placar e fila em disco) e API central (`POST /api/placares`). |
 | F1: Atração e inicialização autônoma do quiosque (Prioridade 6) | Operador do quiosque e jogador | Sobe a interface direto na tela de atração ao ligar o computador na tomada, exibe mapa de teclas, bloqueia teclas de saída do sistema operacional e retorna ao início após inatividade. | React (views `Atracao` e `MapaTeclas`), scripts de boot Linux e flags do Chromium em modo `--kiosk`. |
@@ -61,7 +61,7 @@ A tabela reúne as seis features verticais do fliperama em ordem de prioridade d
   1. O painel exibe uma grade com capas, título, autoria, controles, tema e nível de cada jogo.
   2. A navegação usa apenas setas e Enter, com foco visual claro no card selecionado.
   3. O jogador pode filtrar os títulos por tema usando teclas de atalho.
-  4. Ao apertar Enter no card, o sistema segue para a identificação do jogador ou abre o jogo caso já identificado.
+  4. Ao apertar Enter no card, o sistema inicia o jogo imediatamente, deixando a avaliação e a identificação para o término da partida.
   5. As informações vêm do cache local, com resposta abaixo de 150 ms.
 - Partes do sistema envolvidas:
   - React: view `PainelSelecao`, componente de card e indicador de modo offline.
@@ -69,18 +69,18 @@ A tabela reúne as seis features verticais do fliperama em ordem de prioridade d
   - Disco: `/var/lib/recreio-arcade/catalogo.json` e pastas de assets.
   - Requisitos associados: RF-L02, RF-L03, RF-L11, RF-L14.
 
-### F2: Identificação do jogador com validação de apelido
+### F2: Identificação do jogador com validação de apelido e matrícula
 
-- Problema: o ranking precisa associar pontuações a um jogador sem coletar dados pessoais (LGPD), sem burocracia de login e sem permitir termos ofensivos na tela pública.
+- Problema: o ranking precisa associar pontuações a um jogador sem burocracia de login prévio e sem permitir termos ofensivos na tela pública.
 - Quem usa:
-  - Jogador: informa seu identificador antes da partida.
+  - Jogador: informa matrícula institucional e apelido ao concluir a partida.
 - Resultado entregue:
-  1. A tela pede um apelido de até 9 caracteres (`A-Z`, `0-9`).
-  2. O jogador pode digitar pelo teclado ou montar as letras usando setas para cima/baixo e Enter.
-  3. Se pressionar Enter com o campo vazio, o sistema assume `ANON`. Partidas anônimas rodam normalmente, mas não competem no ranking oficial.
+  1. A tela solicita matrícula de 12 dígitos e apelido de até 9 caracteres (`A-Z`, `0-9`) após a avaliação da partida.
+  2. O jogador pode digitar pelo teclado ou pular caso não deseje registrar a pontuação no ranking oficial.
+  3. Se pressionar Enter com o apelido vazio, o sistema assume `ANON`.
   4. O sistema converte minúsculas em maiúsculas de forma automática.
   5. Se o texto estiver na lista de bloqueio do quiosque, a interface pede outro apelido sem exibir detalhes técnicos.
-  6. O apelido aprovado entra no estado da sessão e segue para a partida.
+  6. Os dados aprovados são anexados ao resultado da partida para gravação e envio.
 - Partes do sistema envolvidas:
   - React: view `Identificacao`, seletor de caracteres por setas e avisos de validação.
   - Fastify: rotina de sanitização e comparação com termos bloqueados.

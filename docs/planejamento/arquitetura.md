@@ -107,12 +107,12 @@ graph TD
 
 Aplicação em React com TypeScript empacotada com Vite para rodar em tela cheia no quiosque:
 
-- Máquina de estados: a interface transita diretamente entre cinco estados em memória sem usar rotas de URL convencionais:
-  $$\text{ATRAÇÃO} \longrightarrow \text{APELIDO} \longrightarrow \text{PAINEL} \longrightarrow \text{EM\_JOGO} \longrightarrow \text{FIM} \longrightarrow \text{PAINEL}$$
+- Máquina de estados: a interface transita diretamente entre estados em memória sem usar rotas de URL convencionais:
+  $$\text{ATRAÇÃO} \longrightarrow \text{PAINEL} \longrightarrow \text{EM\_JOGO} \longrightarrow \text{RESULTADO (VOTAÇÃO)} \longrightarrow \text{IDENTIFICAÇÃO} \longrightarrow \text{PAINEL}$$
 - Navegação por teclado (RF-L11): gerencia o foco com as setas do teclado, confirma com Enter e volta com Escape, mantendo um elemento visualmente ativo o tempo todo.
 - Resolução e contraste (RF-L14): layout ajustado para 1024×768 (proporção 4:3) com contraste alto e fontes legíveis a dois metros.
-- Retorno por inatividade (RF-L09): volta para a tela de atração e limpa o apelido após 60 segundos sem entrada no catálogo ou 20 segundos na tela final.
-- Identificação do jogador (RF-L04, RF-L26): coleta apelido de até 9 caracteres (`A-Z`, `0-9`). O sistema preenche `ANON` se o campo ficar vazio e barra palavras da lista de termos bloqueados.
+- Retorno por inatividade (RF-L09): volta para a tela de atração e limpa dados transitórios após 60 segundos sem entrada no catálogo ou 20 segundos na tela final.
+- Identificação do jogador (RF-L04, RF-L26): coleta matrícula institucional de 12 dígitos e apelido de até 9 caracteres (`A-Z`, `0-9`). O sistema preenche `ANON` se o apelido ficar vazio e barra termos da lista de bloqueio. A identificação ocorre ao término da partida para não gerar atrito na entrada do jogo.
 
 ### 2.2. Servidor local (Fastify + TypeScript)
 
@@ -254,7 +254,7 @@ sequenceDiagram
     end
 
     alt Jogo conclui normalmente
-        Game->>UI: postMessage(PLACAR: { pontos, duracao_s, acertos, erros, tema })
+        Game->>UI: postMessage(PLACAR ou GAME_OVER: { pontos, duracao_s })
     else Timeout de jogo (5 min) ou Inatividade (15s carga)
         UI->>UI: Dispara encerramento forçado por timeout
     end
@@ -277,8 +277,10 @@ sequenceDiagram
     participant API_G1 as Plataforma de Gestão (G1)
 
     UI->>Player: Solicita Voto (1 a 5 estrelas ou pular)
-    Player-->>UI: Informa nota / Pula
-    UI->>Fastify: POST /resultados { apelido, jogoId, pontuacao, avaliacao, duracao_s, ... }
+    Player-->>UI: Informa nota ou pula
+    UI->>Player: Solicita Identificação (matrícula de 12 dígitos e apelido ou pular)
+    Player-->>UI: Informa dados ou pula
+    UI->>Fastify: POST /resultados { matricula, apelido, jogoId, pontuacao, avaliacao, duracao_s, ... }
 
     Fastify->>Fastify: Gerar id_partida (UUID v4) e jogado_em (ISO 8601)
     Fastify->>Disk: Append de linha em partidas.jsonl (histórico imediato)
