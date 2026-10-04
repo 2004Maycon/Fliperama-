@@ -1,7 +1,41 @@
-import { mkdir, readFile, writeFile } from 'node:fs/promises'
+import { mkdir, open, readdir, readFile, rename, rm, stat } from 'node:fs/promises'
 import { randomUUID } from 'node:crypto'
+import path from 'node:path'
 
-const ARQUIVO_FILA = './data/fila-resultados.json'
+export function obterPastaFila() {
+  return './data/fila'
+}
+
+export function obterPastaEnviadas() {
+  return './data/enviadas'
+}
+
+export async function gravarArquivoAtomico(
+  caminhoDestino: string,
+  conteudo: string
+): Promise<void> {
+  const caminhoTmp = `${caminhoDestino}.tmp`
+  let handle
+  try {
+    handle = await open(caminhoTmp, 'w')
+    await handle.writeFile(conteudo, 'utf-8')
+    await handle.sync()
+  } catch (erro) {
+    if (handle) {
+      await handle.close().catch(() => {})
+    }
+    await rm(caminhoTmp, { force: true }).catch(() => {})
+    throw erro
+  }
+  await handle.close()
+
+  try {
+    await rename(caminhoTmp, caminhoDestino)
+  } catch (erro) {
+    await rm(caminhoTmp, { force: true }).catch(() => {})
+    throw erro
+  }
+}
 
 export type ResultadoPartida = {
   id: string
@@ -14,57 +48,107 @@ export type ResultadoPartida = {
 }
 
 export async function prepararFilaResultados() {
-  await mkdir('./data', { recursive: true })
-  try {
-    await readFile(ARQUIVO_FILA, 'utf-8')
-  } catch {
-    await writeFile(
-      ARQUIVO_FILA,
-      JSON.stringify([], null, 2)
-    )
-  }
+  await mkdir(obterPastaFila(), { recursive: true })
+  await mkdir(obterPastaEnviadas(), { recursive: true })
 }
 
 export async function buscarFilaResultados() {
-  const conteudo = await readFile(
-    ARQUIVO_FILA,
-    'utf-8'
-  )
+  const pastaFila = obterPastaFila()
+  let entradas: string[]
+  try {
+    entradas = await readdir(pastaFila)
+  } catch (erro: unknown) {
+    if ((erro as NodeJS.ErrnoException).code === 'ENOENT') {
+      return []
+    }
+    throw erro
+  }
 
-  return JSON.parse(conteudo) as ResultadoPartida[]
+  const resultados: ResultadoPartida[] = []
+
+  for (const entrada of entradas) {
+    if (!entrada.endsWith('.json')) {
+      continue
+    }
+
+    const caminhoArquivo = path.join(pastaFila, entrada)
+    try {
+      const conteudo = await readFile(caminhoArquivo, 'utf-8')
+      const parsed = JSON.parse(conteudo)
+      if (parsed && typeof parsed === 'object' && typeof parsed.id === 'string') {
+        resultados.push(parsed as ResultadoPartida)
+      } else {
+        console.warn(`Arquivo inválido na fila de resultados: ${entrada}`)
+      }
+    } catch {
+      console.warn(`Erro ao ler arquivo da fila de resultados: ${entrada}`)
+    }
+  }
+
+  resultados.sort((a, b) => {
+    const tempoA = a.jogadoEm || ''
+    const tempoB = b.jogadoEm || ''
+    if (tempoA !== tempoB) {
+      return tempoA.localeCompare(tempoB)
+    }
+    return a.id.localeCompare(b.id)
+  })
+
+  return resultados
 }
 
 export async function removerResultado(id: string) {
-  const fila = await buscarFilaResultados()
+  const pastaFila = obterPastaFila()
+  const pastaEnviadas = obterPastaEnviadas()
 
-  const novaFila = fila.filter(
-    (resultado) => resultado.id !== id
-  )
+  const caminhoOrigem = path.join(pastaFila, `${id}.json`)
+  const caminhoDestino = path.join(pastaEnviadas, `${id}.json`)
 
-  await writeFile(
-    ARQUIVO_FILA,
-    JSON.stringify(novaFila, null, 2)
-  )
+  try {
+    await stat(caminhoOrigem)
+  } catch (erro: unknown) {
+    if ((erro as NodeJS.ErrnoException).code === 'ENOENT') {
+      return
+    }
+    throw erro
+  }
+
+  await mkdir(pastaEnviadas, { recursive: true })
+
+  let jaExisteEmEnviadas = false
+  try {
+    await stat(caminhoDestino)
+    jaExisteEmEnviadas = true
+  } catch (erro: unknown) {
+    if ((erro as NodeJS.ErrnoException).code !== 'ENOENT') {
+      throw erro
+    }
+  }
+
+  if (jaExisteEmEnviadas) {
+    await rm(caminhoOrigem, { force: true })
+  } else {
+    await rename(caminhoOrigem, caminhoDestino)
+  }
 }
 
 export async function adicionarResultado(
   resultado: Omit<ResultadoPartida, 'id' | 'jogadoEm'>
 ) {
-  const conteudo = await readFile(ARQUIVO_FILA, 'utf-8')
+  const pastaFila = obterPastaFila()
+  await mkdir(pastaFila, { recursive: true })
 
-  const fila: ResultadoPartida[] = JSON.parse(conteudo)
-
+  const id = randomUUID()
   const novoResultado: ResultadoPartida = {
-    id: randomUUID(),
+    id,
     ...resultado,
     jogadoEm: new Date().toISOString(),
   }
 
-  fila.push(novoResultado)
-
-  await writeFile(
-    ARQUIVO_FILA,
-    JSON.stringify(fila, null, 2)
+  const caminhoDestino = path.join(pastaFila, `${id}.json`)
+  await gravarArquivoAtomico(
+    caminhoDestino,
+    JSON.stringify(novoResultado, null, 2)
   )
 
   return novoResultado

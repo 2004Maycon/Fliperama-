@@ -51,15 +51,17 @@ Não pule esta etapa. O contexto desses arquivos é indispensável para evitar d
 
 ## 4. Fluxo de trabalho (Git)
 
+Consulte também [`CONTRIBUTING.md`](CONTRIBUTING.md) para diretrizes completas.
+
 | Aspecto | Convenção |
 | --- | --- |
 | **Fork de trabalho** | `nribjoaovictor/Fliperama-` (remote `origin`) |
 | **Repositório oficial** | `Arcade-IFES/Fliperama-` (remote `upstream`, somente leitura) |
-| **Branch estável** | `main` |
-| **Branch de integração** | `dev` |
-| **Branches de trabalho** | `feature/<nome>` ou `fix/<nome>` |
-| **Destino de PRs** | Sempre `dev` — nunca `main` diretamente |
-| **Formato de commits** | Conventional Commits: `feat:`, `fix:`, `docs:`, `chore:` |
+| **Branch base no fork** | `main` (código estável do fork) |
+| **Branches de trabalho** | `feature/<nome>` ou `fix/<nome>` (criadas sempre a partir de `main`) |
+| **Destino de PRs (no fork)** | Sempre `main` do fork via Pull Request (nunca commit direto na `main`) |
+| **Envio para a organização** | PR de `nribjoaovictor/Fliperama-:main` → `Arcade-IFES/Fliperama-:develop` |
+| **Formato de commits** | Conventional Commits: `feat:`, `fix:`, `docs:`, `chore:`, `refactor:` |
 
 ---
 
