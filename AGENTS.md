@@ -33,7 +33,7 @@ O projeto é acadêmico, da disciplina de **Extensão** do curso de **Sistemas d
 ### Pendências estruturais
 
 - **Mover código para a raiz:** o conteúdo de `fliperama-local/` será movido para a raiz do repositório em breve. Até lá, todo o código-fonte vive dentro desse subdiretório.
-- **`.specify/` e `specs/`:** ainda não existem. Quando criados, conterão a constitution e as specs geradas pelo Spec Kit (Spec-Driven Development).
+- **`.specify/` e `specs/`:** configurados e em uso ativo com o Spec Kit (Spec-Driven Development), contendo a constituição (`.specify/memory/constitution.md`) e as especificações de features em `specs/`.
 
 ---
 

@@ -440,7 +440,7 @@ Sincronizar jogos com a API de Gestão (G1), executar pacotes locais em cache, c
 | EPIC-01 | US-01 | Consumir `GET /api/jogos`, download condicional e checagem sha256 | João Victor | Em andamento |
 | EPIC-01 | US-02 | Rodar jogos do cache em disco mesmo sem conexão ativa | César | Em andamento |
 | EPIC-01 | US-03 | Criar fila de reenvio em disco com espera crescente e idempotência por `id_partida` | João Victor | Em andamento |
-| EPIC-01 | US-04 | Criar módulo de persistência com escrita atômica e append-only em `partidas.jsonl` | César | Em andamento |
+| EPIC-01 | US-04 | Criar módulo de persistência com escrita atômica e append-only em `partidas.jsonl` | César | Em andamento (fila individual concluída na issue #15) |
 | EPIC-01 | US-06 | Implementar leitura de configuração externa (URL, token de estação) | Maycon | Em andamento |
 | EPIC-02 | US-07 | Desenvolver painel de seleção em React com grade alimentada pelo `catalogo.json` | Matheus | Em andamento |
 | EPIC-02 | US-08 | Implementar tela de identificação por matrícula e apelido | Matheus | Em andamento |
@@ -461,7 +461,7 @@ Sincronizar jogos com a API de Gestão (G1), executar pacotes locais em cache, c
 
 ### Observações
 
-> Escopo da Entrega E2 (28/09/2026). A validação inclui desconectar o cabo de rede durante a partida e testar reenvios repetidos. O fluxo de telas foi ajustado para que o jogador acesse o jogo imediatamente a partir do catálogo, realizando a avaliação e a identificação institucional ao final da sessão.
+> Escopo da Entrega E2 (28/09/2026). A validação inclui desconectar o cabo de rede durante a partida e testar reenvios repetidos. O fluxo de telas foi ajustado para que o jogador acesse o jogo imediatamente a partir do catálogo, realizando a avaliação e a identificação institucional ao final da sessão. A persistência atômica por arquivo individual na fila de reenvio (`data/fila/<id>.json` e `data/enviadas/<id>.json`) foi concluída na issue #15.
 
 ---
 

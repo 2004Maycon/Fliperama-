@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-04
 
-**Status**: Draft
+**Status**: Implemented
 
 **Input**: User description: "Issue #15 (Arcade-IFES/Fliperama-): fix(US-04) persistência por arquivo individual na fila de reenvio. Hoje a fila de resultados é guardada em um único arquivo reescrito por completo a cada operação, o que cria um ponto único de falha: uma queda de energia durante a escrita pode corromper todo o histórico de partidas pendentes. A fila deve guardar um arquivo por partida pendente, mover para a pasta de enviadas após envio bem-sucedido, listar a fila lendo a pasta e preparar ambas as pastas na inicialização. O arquivo legado da fila única pode ser ignorado por ora."
 
