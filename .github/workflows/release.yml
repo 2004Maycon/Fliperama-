@@ -1,0 +1,46 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    name: Compilar e Publicar Release
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: fliperama-local
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configurar Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: fliperama-local/package-lock.json
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Compilar Frontend (Build)
+        run: npm run build
+
+      - name: Compactar pacote da versão
+        run: |
+          tar -czf ../fliperama-${{ github.ref_name }}.tar.gz dist server package.json package-lock.json
+
+      - name: Publicar Release no GitHub
+        uses: softprops/action-gh-release@v2
+        with:
+          files: fliperama-${{ github.ref_name }}.tar.gz
+          generate_release_notes: true
