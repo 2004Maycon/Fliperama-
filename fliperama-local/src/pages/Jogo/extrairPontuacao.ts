@@ -1,14 +1,22 @@
-// Contrato comum para jogos exibidos dentro do iframe do fliperama.
-export function extrairPontuacao(mensagem: unknown): number | null {
-  if (typeof mensagem !== 'object' || mensagem === null) return null
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null
+}
 
-  const dados = mensagem as { type?: unknown; payload?: unknown }
-  if (dados.type !== 'GAME_OVER' || typeof dados.payload !== 'object' || dados.payload === null) {
+export function extrairPontuacao(mensagem: unknown, jogoEsperado: string): number | null {
+  if (!isRecord(mensagem) || mensagem.jogo !== jogoEsperado || !isRecord(mensagem.payload)) {
     return null
   }
 
-  const { score } = dados.payload as { score?: unknown }
-  return typeof score === 'number' && Number.isFinite(score) && score >= 0
-    ? score
+  const campoPontuacao = mensagem.type === 'PLACAR'
+    ? 'pontos'
+    : mensagem.type === 'GAME_OVER'
+      ? 'score'
+      : null
+
+  if (campoPontuacao === null) return null
+
+  const pontuacao = mensagem.payload[campoPontuacao]
+  return typeof pontuacao === 'number' && Number.isFinite(pontuacao) && pontuacao >= 0
+    ? pontuacao
     : null
 }

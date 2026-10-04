@@ -42,8 +42,8 @@ A tabela reúne as seis features verticais do fliperama em ordem de prioridade d
 - Resultado entregue:
   1. O jogador escolhe o jogo e aciona a partida.
   2. O React monta um `<iframe sandbox="allow-scripts">` sem `allow-same-origin`, apontando para a rota do Fastify local.
-  3. O fliperama envia a mensagem `ARCADE_INIT` com apelido, melhores pontuações e estado do áudio.
-  4. O jogo roda e, ao terminar, emite `postMessage` do tipo `PLACAR` com pontos, duração, acertos, erros e tema.
+  3. Depois que o iframe carregar, o fliperama envia uma única mensagem `ARCADE_INIT` com `type: "ARCADE_INIT"`, `mudo: false` e `recordes: []`, sem matrícula ou apelido.
+  4. O jogo roda em iframe com sandbox restrito a `allow-scripts`; ao terminar, emite `postMessage` do tipo `PLACAR` com `jogo` e a pontuação em `payload.pontos`.
   5. Se o jogo não responder em 15 segundos ou a partida passar de 5 minutos, o supervisor encerra por timeout.
   6. Ao receber o placar ou atingir timeout, o React desmonta o iframe para liberar memória RAM e passa para a tela final.
 - Partes do sistema envolvidas:
@@ -51,6 +51,8 @@ A tabela reúne as seis features verticais do fliperama em ordem de prioridade d
   - Fastify: entrega de arquivos estáticos em `/jogos/:id/:versao/*`.
   - Disco: `/var/lib/recreio-arcade/jogos/<id>/<versao>/`.
   - Contratos externos: mensagens `ARCADE_INIT`, `ARCADE_MUDO` e `PLACAR` (RF-L05, RF-L06, RF-L10, RF-L16, RF-L22, RF-L23).
+  - Para mensagens recebidas, validar a identidade da janela por `event.source === iframe.contentWindow`, o identificador do jogo ativo e o esquema; não tratar a origem opaca `"null"` como autenticação. Manter também compatibilidade com `GAME_OVER` legado.
+  - A identificação por matrícula e apelido continua ocorrendo somente após a partida.
 
 ### F3: Navegação e seleção no catálogo de jogos locais
 

@@ -1,8 +1,8 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, type SyntheticEvent } from 'react'
 import './Jogo.css'
 import type { Jogo as TipoJogo } from '../../types/Jogo'
-import { extrairPontuacao } from './extrairPontuacao'
-
+import { GameFrame } from './GameFrame'
+import { extrairPontuacaoDaMensagemAtiva, sendArcadeInitMessage } from './arcadeMessages'
 
 type JogoProps = {
   jogo: TipoJogo
@@ -16,16 +16,16 @@ function Jogo({ jogo, onFinalizar, onVoltarInicio }: JogoProps) {
 
   useEffect(() => {
     finalizado.current = false
-    const origemJogo = new URL(jogo.caminho, window.location.href).origin
 
     function receberMensagem(event: MessageEvent) {
-      if (
-        event.source !== iframe.current?.contentWindow ||
-        event.origin !== origemJogo ||
-        finalizado.current
-      ) return
+      if (finalizado.current) return
 
-      const pontuacao = extrairPontuacao(event.data)
+      const pontuacao = extrairPontuacaoDaMensagemAtiva(
+        event.source,
+        iframe.current,
+        jogo.id,
+        event.data,
+      )
       if (pontuacao === null) return
 
       finalizado.current = true
@@ -37,7 +37,11 @@ function Jogo({ jogo, onFinalizar, onVoltarInicio }: JogoProps) {
     return () => {
       window.removeEventListener('message', receberMensagem)
     }
-  }, [jogo.caminho, onFinalizar])
+  }, [jogo.id, onFinalizar])
+
+  function inicializarJogo(event: SyntheticEvent<HTMLIFrameElement>) {
+    sendArcadeInitMessage(event.currentTarget, iframe.current)
+  }
 
   return (
     <main className="jogo-screen">
@@ -55,11 +59,11 @@ function Jogo({ jogo, onFinalizar, onVoltarInicio }: JogoProps) {
         </header>
 
         <section className="game-container">
-        <iframe
-            ref={iframe}
-            src={jogo.caminho}
-            title={jogo.nome}
-            className="game-frame"
+        <GameFrame
+          iframeRef={iframe}
+          src={jogo.caminho}
+          title={jogo.nome}
+          onLoad={inicializarJogo}
         />
         </section>
     </main>

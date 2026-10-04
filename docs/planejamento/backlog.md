@@ -58,7 +58,7 @@
 | US-16 | US | Capturar placar via postMessage conferindo a origem e o jogo em execução | Alta | Concluído |
 | US-17 | US | Remover iframe e liberar memória RAM ao fim de cada partida | Alta | Em andamento |
 | US-18 | US | Bloquear atalhos de saída do sistema operacional (modo kiosk restrito) | Alta | Pendente |
-| US-19 | US | Enviar dados iniciais de leitura para o jogo (ARCADE_INIT com recordes e apelido) | Média | Em andamento |
+| US-19 | US | Enviar ARCADE_INIT sem identificação prévia (mudo false e recordes vazios) | Média | Em andamento |
 | US-20 | US | Encerrar partidas por timeout (15 s para carregar, 5 min de jogo) com log | Média | Pendente |
 | US-21 | US | Alternar mudo global por tecla dedicada e manter estado entre partidas (ARCADE_MUDO) | Média | Pendente |
 | US-22 | US | Coletar nota de 1 a 5 e comentário ao fim da partida, com tecla para pular | Alta | Em andamento |
@@ -292,8 +292,8 @@ Coletar votos dos alunos, registrar histórico de partidas em disco e gerar dado
 * **Requisito:** RF-L06
 * **Critérios de aceitação:**
   1. Ouvir eventos disparados por `window.addEventListener('message', ...)`.
-  2. Validar se `event.source === iframe.contentWindow` e se o identificador confere com o jogo ativo.
-  3. Coletar dados da partida nos formatos `PLACAR` (protocolo oficial G4) e `GAME_OVER` (compatibilidade).
+  2. Validar se `event.source === iframe.contentWindow`, se `event.data.jogo` corresponde ao jogo ativo e se o esquema e a pontuação são válidos; não usar `event.origin === "null"` como autenticação sob sandbox sem `allow-same-origin`.
+  3. Coletar `PLACAR` (protocolo oficial G4, pontuação finita e não negativa em `payload.pontos`) e `GAME_OVER` (compatibilidade, pontuação em `payload.score`), ambos com `jogo` no nível superior.
   4. Anexar `jogador`, `id_partida` (UUID) e `jogado_em` antes de salvar e enviar.
 
 ##### US-17: Encerrar jogo e liberar memória
@@ -315,11 +315,17 @@ Coletar votos dos alunos, registrar histórico de partidas em disco e gerar dado
 
 ##### US-19: Fornecer dados somente-leitura ao jogo
 
-* **Como** jogo (G4), **quero** receber o apelido do jogador e recordes ao iniciar a partida, **para que** eu personalize a rodada.
+* **Como** jogo (G4), **quero** receber o estado inicial de áudio e a lista de recordes ao iniciar a partida, **para que** eu personalize a rodada sem depender da identificação antecipada.
 * **Requisito:** RF-L16
 * **Critérios de aceitação:**
-  1. Enviar mensagem `ARCADE_INIT` para o iframe com apelido, melhores pontuações e estado do áudio no início da partida.
-  2. Tratar os dados como somente-leitura, sem permitir alterações no estado interno da plataforma.
+  1. Após o iframe terminar de carregar, enviar uma única mensagem `ARCADE_INIT` ao iframe ativo com `{ type: "ARCADE_INIT", mudo: false, recordes: [] }`, sem matrícula ou apelido.
+  2. Não enviar a mensagem se o iframe estiver ausente, desconectado ou tiver sido substituído antes do carregamento.
+  3. Executar jogos em iframe com `sandbox="allow-scripts"` apenas, sem `allow-same-origin`, permissão de pop-up ou navegação no contexto superior.
+  4. Para mensagens recebidas, validar `event.source === iframe.contentWindow`, `event.data.jogo` contra o jogo ativo e o esquema/pontuação; não confiar em `event.origin === "null"`.
+  5. Continuar capturando `PLACAR` oficial em `payload.pontos` e `GAME_OVER` legado em `payload.score`, ambos com `jogo` correspondente ao jogo ativo.
+  6. Preservar o fluxo em que matrícula e apelido são coletados somente após a partida.
+  7. Tratar os dados iniciais como somente-leitura, sem permitir alterações no estado interno da plataforma.
+  8. Os testes automatizados no Node Test Runner cobrem o payload inicial, supressão quando iframe ausente/substituído, configuração do sandbox e recebimento/rejeição de mensagens de placar.
 
 ##### US-20: Encerrar jogos por timeout
 
