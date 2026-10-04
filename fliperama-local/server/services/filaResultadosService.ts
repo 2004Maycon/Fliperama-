@@ -2,15 +2,23 @@ import { mkdir, open, readdir, readFile, rename, rm, stat } from 'node:fs/promis
 import { randomUUID } from 'node:crypto'
 import path from 'node:path'
 
-export function obterPastaFila() {
+function obterPastaFila() {
   return './data/fila'
 }
 
-export function obterPastaEnviadas() {
+function obterPastaEnviadas() {
   return './data/enviadas'
 }
 
-export async function gravarArquivoAtomico(
+function caminhoArquivoFila(id: string) {
+  return path.join(obterPastaFila(), `${id}.json`)
+}
+
+function caminhoArquivoEnviada(id: string) {
+  return path.join(obterPastaEnviadas(), `${id}.json`)
+}
+
+async function gravarArquivoAtomico(
   caminhoDestino: string,
   conteudo: string
 ): Promise<void> {
@@ -98,11 +106,10 @@ export async function buscarFilaResultados() {
 }
 
 export async function removerResultado(id: string) {
-  const pastaFila = obterPastaFila()
   const pastaEnviadas = obterPastaEnviadas()
 
-  const caminhoOrigem = path.join(pastaFila, `${id}.json`)
-  const caminhoDestino = path.join(pastaEnviadas, `${id}.json`)
+  const caminhoOrigem = caminhoArquivoFila(id)
+  const caminhoDestino = caminhoArquivoEnviada(id)
 
   try {
     await stat(caminhoOrigem)
@@ -145,7 +152,7 @@ export async function adicionarResultado(
     jogadoEm: new Date().toISOString(),
   }
 
-  const caminhoDestino = path.join(pastaFila, `${id}.json`)
+  const caminhoDestino = caminhoArquivoFila(id)
   await gravarArquivoAtomico(
     caminhoDestino,
     JSON.stringify(novoResultado, null, 2)
