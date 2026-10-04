@@ -15,10 +15,23 @@ test('captura o placar emitido pela Corrida ao terminar', () => {
     payload: { score: 150, duration_seconds: 80 },
   }
 
-  assert.equal(extrairPontuacao(mensagem), 150)
-  assert.equal(extrairPontuacao({ type: 'EXIT_GAME', payload: {} }), null)
-  assert.equal(extrairPontuacao({ type: 'GAME_OVER', payload: { score: -1 } }), null)
-  assert.equal(extrairPontuacao({ type: 'GAME_OVER', payload: { score: Infinity } }), null)
+  assert.equal(extrairPontuacao(mensagem, 'corrida-contra-o-sino'), 150)
+  assert.equal(extrairPontuacao({ type: 'EXIT_GAME', payload: {} }, 'corrida-contra-o-sino'), null)
+  assert.equal(extrairPontuacao({
+    type: 'GAME_OVER',
+    jogo: 'corrida-contra-o-sino',
+    payload: { score: -1 },
+  }, 'corrida-contra-o-sino'), null)
+  assert.equal(extrairPontuacao({
+    type: 'GAME_OVER',
+    jogo: 'corrida-contra-o-sino',
+    payload: { score: Infinity },
+  }, 'corrida-contra-o-sino'), null)
+  assert.equal(extrairPontuacao({
+    type: 'PLACAR',
+    jogo: 'corrida-contra-o-sino',
+    payload: { pontos: 200 },
+  }, 'corrida-contra-o-sino'), 200)
 })
 
 test('envia um placar compatível com o ranking sem expor a matrícula', () => {

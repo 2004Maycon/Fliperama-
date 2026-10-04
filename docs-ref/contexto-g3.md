@@ -141,11 +141,11 @@ A comunicação entre a plataforma e o jogo ocorre por meio de três mensagens:
 
 | Mensagem | Direção | Momento |
 | --- | --- | --- |
-| `ARCADE_INIT` | Fliperama → Jogo | Na inicialização da partida (apelido, estado do mudo e melhores pontuações) |
+| `ARCADE_INIT` | Fliperama → Jogo | Após o carregamento do iframe ativo (`type`, `mudo: false`, `recordes: []`; sem matrícula ou apelido nesta feature) |
 | `ARCADE_MUDO` | Fliperama → Jogo | Em alterações no estado do áudio global |
 | `PLACAR` | Jogo → Fliperama | Ao encerrar a partida (pontos, tempo, acertos, erros e tema) |
 
-Validação de mensagens: o fliperama processa a mensagem apenas se `event.source === iframe.contentWindow` e `event.data.jogo` corresponder ao jogo em execução.
+Isolamento e validação: o iframe usa `sandbox="allow-scripts"` sem `allow-same-origin`, pop-ups ou navegação no contexto superior. Como a origem é opaca e aparece como `"null"`, esse valor não autentica a mensagem. O fliperama aceita mensagens somente quando `event.source === iframe.contentWindow`, `event.data.jogo` corresponde ao jogo ativo e o tipo/payload são válidos. O protocolo oficial `PLACAR` usa `payload.pontos`; a compatibilidade legada `GAME_OVER` usa `payload.score`; ambas as pontuações devem ser finitas e não negativas.
 
 Antes de encaminhar a pontuação ao servidor via `POST /api/placares`, a plataforma local adiciona os campos `jogador`, `id_partida` (UUID) e `jogado_em`, autenticando a requisição com o token da estação.
 

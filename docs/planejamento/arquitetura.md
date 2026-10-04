@@ -177,10 +177,10 @@ Módulo responsável por carregar os jogos desenvolvidos por outros grupos:
 
   Sem o parâmetro `allow-same-origin`, o navegador atribui uma origem nula ao iframe, impedindo que o código do jogo acesse o armazenamento local, cookies ou outras rotas do quiosque.
 - Mensagens por `postMessage` (RF-L06, RF-L16, RF-L23):
-  - `ARCADE_INIT` (fliperama para o jogo): envia apelido, melhores pontuações e estado inicial do som após o carregamento.
+  - `ARCADE_INIT` (fliperama para o jogo): após o evento de carregamento do iframe ativo, envia uma única mensagem `{ type: "ARCADE_INIT", mudo: false, recordes: [] }`, sem matrícula ou apelido.
   - `ARCADE_MUDO` (fliperama para o jogo): notifica quando o jogador aperta a tecla de silenciar.
   - `PLACAR` (jogo para o fliperama): enviado ao final da partida com pontos, duração, acertos, erros e tema.
-- Validação de mensagens: a plataforma só aceita mensagens em que `event.source === iframe.contentWindow` e o identificador do jogo confere com a partida ativa.
+- Validação de mensagens no sandbox: o iframe usa somente `sandbox="allow-scripts"`, sem `allow-same-origin`, pop-ups ou navegação superior. Como a origem resultante é opaca e serializada como `"null"`, esse valor não é usado como autenticação. A plataforma exige `event.source === iframe.contentWindow`, `event.data.jogo` igual ao jogo ativo e valida o tipo e a pontuação (`PLACAR.payload.pontos` ou `GAME_OVER.payload.score`, finita e não negativa).
 - Limites de tempo (RF-L22): se o jogo demorar mais de 15 segundos para abrir ou a partida passar de 5 minutos, a plataforma encerra a execução, registra o motivo em log e retorna ao painel.
 - Liberação de memória (RF-L10, RNF-L03): ao encerrar a partida, a aplicação remove os ouvintes de evento, altera o `src` do iframe para `about:blank` e remove o elemento do DOM para que o navegador libere a memória da aba.
 
@@ -245,7 +245,7 @@ sequenceDiagram
     Fastify-->>Iframe: Entrega assets estáticos
     Iframe->>Game: Inicializa scripts do jogo
 
-    UI->>Game: postMessage(ARCADE_INIT: { apelido, recordes, mudo })
+    UI->>Game: postMessage(ARCADE_INIT: { type, mudo: false, recordes: [] }, "*")
     Note over Game,Player: Partida em execução no pátio (máx 5 min)
 
     alt Jogador altera mudo
@@ -254,7 +254,7 @@ sequenceDiagram
     end
 
     alt Jogo conclui normalmente
-        Game->>UI: postMessage(PLACAR ou GAME_OVER: { pontos, duracao_s })
+        Game->>UI: postMessage(PLACAR: { jogo, payload: { pontos } })
     else Timeout de jogo (5 min) ou Inatividade (15s carga)
         UI->>UI: Dispara encerramento forçado por timeout
     end
@@ -471,7 +471,7 @@ Mapeamento entre os requisitos do projeto, os épicos do backlog e os arquivos o
 | RF-L13 (Mapa de teclas) | EPIC-02 | React e disco (`teclas.json`) | Mapa gráfico na tela de atração e tela de remapeamento com dados persistidos em disco. |
 | RF-L14 (Resolução mínima) | EPIC-02 | CSS e tokens visuais | Layout dimensionado para 1024×768 (4:3) com contraste alto para leitura a dois metros. |
 | RF-L15 (Persistência em disco) | EPIC-01 | Fastify (`storageUtils`) | Escrita atômica em arquivo temporário com renomeação para estados e formato append-only (`.jsonl`) para histórico. |
-| RF-L16 (Dados somente-leitura) | EPIC-03 | React e Runner (`useArcadeBridge`) | Envio da mensagem `ARCADE_INIT` com apelido ativo e recordes locais na abertura da partida. |
+| RF-L16 (Dados somente-leitura) | EPIC-03 | React e Runner (`useArcadeBridge`) | Envio de `ARCADE_INIT` após o carregamento com `mudo: false` e `recordes: []`, sem identificação prévia do jogador. |
 | RF-L17 (Histórico em disco) | EPIC-04 | Fastify (`partidas.jsonl`) | Registro de cada partida concluída em linha individual, alimentando o ranking local. |
 | RF-L18 (Ranking offline) | EPIC-02 | React e Fastify | Combinação dos dados de `partidas.jsonl` com `ranking-oficial.json`, indicando a origem na tela. |
 | RF-L19 (Boot automático) | EPIC-01 | Linux systemd e autostart | Inicialização do Fastify e do Chromium direto na tela de atração ao ligar o computador na tomada. |
