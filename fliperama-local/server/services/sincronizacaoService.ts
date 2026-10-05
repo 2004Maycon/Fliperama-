@@ -1,6 +1,8 @@
 import AdmZip from 'adm-zip'
 import { mkdir } from 'node:fs/promises'
+import path from 'node:path'
 import { salvarCatalogo } from './catalogoService'
+import { adaptarArquivoDoJogo } from './adaptacaoJogosService'
 
 const JOGOS = [
   {
@@ -33,6 +35,19 @@ export async function sincronizarJogos() {
     recursive: true,
   })
 
+  // Atualiza também o cache existente, mesmo se o download falhar sem internet.
+  for (const jogo of JOGOS) {
+    const nomeRepositorio = jogo.repositorio.split('/').pop()
+    try {
+      await adaptarArquivoDoJogo(
+        path.join(PASTA_JOGOS, `${nomeRepositorio}-main`, jogo.arquivoInicial),
+        jogo.id,
+      )
+    } catch (erro) {
+      if ((erro as NodeJS.ErrnoException).code !== 'ENOENT') throw erro
+    }
+  }
+
   const catalogo = []
 
   for (const jogo of JOGOS) {
@@ -57,6 +72,11 @@ export async function sincronizarJogos() {
     zip.extractAllTo(PASTA_JOGOS, true)
 
     const nomeRepositorio = jogo.repositorio.split('/').pop()
+
+    await adaptarArquivoDoJogo(
+      path.join(PASTA_JOGOS, `${nomeRepositorio}-main`, jogo.arquivoInicial),
+      jogo.id,
+    )
 
     catalogo.push({
       id: jogo.id,

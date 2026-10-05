@@ -3,9 +3,10 @@ import cors from '@fastify/cors'
 import fastifyStatic from '@fastify/static'
 import path from 'node:path'
 import { sincronizarJogos } from './services/sincronizacaoService'
-import {prepararFilaResultados,adicionarResultado,} from './services/filaResultadosService'
+import { prepararFilaResultados } from './services/filaResultadosService'
 import {prepararCatalogo,buscarCatalogo,} from './services/catalogoService'
 import { reenviarPendentes } from './services/reenvioService'
+import { registrarRotaResultados } from './routes/resultados'
 
 const fastify = Fastify()
 
@@ -38,48 +39,7 @@ fastify.post('/sincronizar', async () => {
   }
 })
 
-fastify.post('/resultados', async (request, reply) => {
-  const resultado = request.body as {
-    matricula?: unknown
-    apelido?: unknown
-    jogoId?: unknown
-    pontuacao?: unknown
-    avaliacao?: unknown
-  } | undefined
-
-  if (
-    !resultado ||
-    typeof resultado.matricula !== 'string' ||
-    !/^\d{12}$/.test(resultado.matricula) ||
-    typeof resultado.apelido !== 'string' ||
-    !resultado.apelido.trim() ||
-    resultado.apelido.trim().length > 9 ||
-    typeof resultado.jogoId !== 'string' ||
-    !resultado.jogoId.trim() ||
-    typeof resultado.pontuacao !== 'number' ||
-    !Number.isFinite(resultado.pontuacao) ||
-    resultado.pontuacao < 0 ||
-    typeof resultado.avaliacao !== 'number' ||
-    !Number.isInteger(resultado.avaliacao) ||
-    resultado.avaliacao < 1 ||
-    resultado.avaliacao > 5
-  ) {
-    return reply.code(400).send({ sucesso: false, erro: 'Dados da partida inválidos.' })
-  }
-
-  const resultadoSalvo = await adicionarResultado({
-    matricula: resultado.matricula,
-    apelido: resultado.apelido.trim().toUpperCase(),
-    jogoId: resultado.jogoId,
-    pontuacao: resultado.pontuacao,
-    avaliacao: resultado.avaliacao,
-  })
-
-  return {
-    sucesso: true,
-    resultado: resultadoSalvo,
-  }
-})
+await fastify.register(registrarRotaResultados)
 
 async function iniciarServidor() {
   try {
