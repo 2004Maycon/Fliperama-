@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import './Identificacao.css'
 
 type identificacaoProps = {
@@ -10,22 +10,36 @@ function Identificacao( {onContinuar}: identificacaoProps ) {
     const [apelido, setApelido] = useState('')
     const [salvando, setSalvando] = useState(false)
     const [erro, setErro] = useState('')
+    const salvandoRef = useRef(false)
 
-    async function Confirmar() {
-        if (salvando) return
+    function Confirmar() {
+        const apelidoNormalizado = apelido.trim().toUpperCase() || 'ANON'
 
-        if (!/^\d{12}$/.test(matricula) || apelido.trim() === '') {
-            setErro('Informe uma matrícula de 12 números e um apelido.')
+        if (!/^[A-Z0-9]{1,9}$/.test(apelidoNormalizado)) {
+            setErro('Use até 9 letras ou números no apelido, sem espaços.')
             return
         }
 
+        if (apelidoNormalizado !== 'ANON' && matricula !== '' && !/^\d{12}$/.test(matricula)) {
+            setErro('A matrícula deve ter 12 números ou ficar vazia.')
+            return
+        }
+
+        void salvar(apelidoNormalizado === 'ANON' ? '' : matricula, apelidoNormalizado)
+    }
+
+    async function salvar(matriculaPartida: string, apelidoPartida: string) {
+        if (salvandoRef.current) return
+
+        salvandoRef.current = true
         setSalvando(true)
         setErro('')
 
         try {
-            await onContinuar(matricula, apelido.trim().toUpperCase())
+            await onContinuar(matriculaPartida, apelidoPartida)
         } catch {
             setErro('Não foi possível salvar a partida. Verifique o servidor e tente novamente.')
+            salvandoRef.current = false
             setSalvando(false)
         }
     }
@@ -36,7 +50,7 @@ function Identificacao( {onContinuar}: identificacaoProps ) {
 
             <form className="identificacao-form" onSubmit={(event) => {
                 event.preventDefault()
-                void Confirmar()
+                Confirmar()
             }}>
             <label>
                 Matrícula
@@ -59,7 +73,7 @@ function Identificacao( {onContinuar}: identificacaoProps ) {
                 />
             </label>
 
-            <p>Seu apelido aparecerá no ranking.</p>
+            <p>Seu apelido pode aparecer no ranking. Sem identificação, seu placar e voto ainda são salvos.</p>
 
             {erro && <p className="identificacao-erro" role="alert">{erro}</p>}
 
@@ -67,6 +81,14 @@ function Identificacao( {onContinuar}: identificacaoProps ) {
                 {salvando ? 'SALVANDO...' : 'SALVAR PARTIDA'}
             </button>
             </form>
+            <button
+                type="button"
+                className="identificacao-anonimo"
+                disabled={salvando}
+                onClick={() => void salvar('', 'ANON')}
+            >
+                JOGAR SEM IDENTIFICAÇÃO
+            </button>
         </main>
     )
 }

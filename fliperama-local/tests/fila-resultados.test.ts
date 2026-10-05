@@ -144,8 +144,22 @@ test('US1 (T010): buscarFilaResultados retorna todas as partidas ordenadas por j
 
     const fila = await buscarFilaResultados()
     assert.equal(fila.length, 2)
-    assert.equal(fila[0].id, p1.id)
-    assert.equal(fila[1].id, p2.id)
+    // As duas gravações podem ocorrer no mesmo milissegundo; nesse caso vale o id.
+    const esperada = [p1, p2].sort((a, b) =>
+      (a.jogadoEm || '').localeCompare(b.jogadoEm || '') || a.id.localeCompare(b.id)
+    )
+    assert.deepEqual(fila.map((partida) => partida.id), esperada.map((partida) => partida.id))
+
+    // Datas controladas verificam a ordem independentemente da velocidade do disco.
+    p1.jogadoEm = '2026-10-05T12:00:00.000Z'
+    p2.jogadoEm = '2026-10-05T11:00:00.000Z'
+    await writeFile(path.join('./data/fila', `${p1.id}.json`), JSON.stringify(p1))
+    await writeFile(path.join('./data/fila', `${p2.id}.json`), JSON.stringify(p2))
+    assert.deepEqual((await buscarFilaResultados()).map((partida) => partida.id), [p2.id, p1.id])
+
+    p1.jogadoEm = p2.jogadoEm
+    await writeFile(path.join('./data/fila', `${p1.id}.json`), JSON.stringify(p1))
+    assert.deepEqual((await buscarFilaResultados()).map((partida) => partida.id), [p1.id, p2.id].sort())
   })
 })
 
