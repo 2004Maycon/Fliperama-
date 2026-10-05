@@ -2,10 +2,10 @@ import os
 import zipfile
 import requests
 
-# Endereço base da sua API hospedada no Render
+
 BASE_URL = "https://plataforma-gestao-api.onrender.com"
 
-# 1. Buscar o catálogo de jogos (por padrão, traz os aprovados)
+
 url_catalogo = f"{BASE_URL}/api/jogos"
 
 print(f"Buscando catálogo em: {url_catalogo}")
@@ -15,14 +15,14 @@ if resposta.status_code == 200:
   jogos = resposta.json()
   print(f"Total de jogos encontrados no catálogo: {len(jogos)}")
 
-  # Pastas locais
+
   pasta_zips = "pacotes_jogos"
   pasta_jogos_prontos = "jogos_instalados"
 
   os.makedirs(pasta_zips, exist_ok=True)
   os.makedirs(pasta_jogos_prontos, exist_ok=True)
 
-  # 2. Percorrer cada jogo para baixar e extrair
+
   for jogo in jogos:
     jogo_id = jogo.get("id")
     nome_jogo = jogo.get("nome", f"jogo_{jogo_id}")
@@ -38,14 +38,14 @@ if resposta.status_code == 200:
     if resposta_pacote.status_code == 200:
       caminho_zip = os.path.join(pasta_zips, f"jogo_{jogo_id}.zip")
 
-      # Salva o arquivo ZIP
+     
       with open(caminho_zip, "wb") as f:
         for chunk in resposta_pacote.iter_content(chunk_size=8192):
           f.write(chunk)
 
       print("-> Pacote baixado com sucesso.")
 
-      # 3. Extrai o ZIP para a pasta onde o fliperama vai ler os jogos
+    
       pasta_destino_jogo = os.path.join(pasta_jogos_prontos, f"jogo_{jogo_id}")
       os.makedirs(pasta_destino_jogo, exist_ok=True)
 
